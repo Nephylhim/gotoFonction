@@ -64,5 +64,9 @@ function goto(){
                 echo "Tapez 'goto -h' pour afficher l'aide"
             fi
         fi
+    else
+        echo "Utilisation : goto ALIAS"
+        echo "         ou : goto OPTION ALIAS [CHEMIN]"
+        echo "Tapez 'goto -h' pour afficher l'aide"
     fi
 }
