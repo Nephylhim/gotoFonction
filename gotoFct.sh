@@ -1,4 +1,8 @@
 function goto(){
+    if [ ! -e "~/.gotoFct" ]; then
+        touch ~/.gotoFct
+    fi
+
     cmd="$@"
     if [[ $cmd == "-l" || $cmd == "--list" || $cmd == "list" ]]; then
         echo "Liste des alias :"; echo ""
