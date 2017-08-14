@@ -23,7 +23,7 @@ function goto(){
             echo "La commande est goto -r <alias>"
             echo "Tapez 'goto -h' pour afficher l'aide"
         else
-            sed -i.bak "/$2*:/d" ~/.gotoFct
+            sed -i.bak "/$2:/d" ~/.gotoFct
             echo "$2 supprimé !"
         fi
     elif [[ $1 == "-h" || $1 == "--help" || $1 == "help" ]]; then
