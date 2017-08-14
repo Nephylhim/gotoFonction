@@ -6,7 +6,7 @@ function goto(){
             alias=${line%:*}
             pwd=${line#*:}
             echo "$alias -> $pwd"
-        done < /home/thomas/.gotoFct
+        done < ~/.gotoFct
     else
         if [[ $1 == "-a" || $1 == "--add"  || $1 == "add" ]]; then
             if [[ $# != 3 ]]; then
@@ -14,7 +14,7 @@ function goto(){
                 echo "Tapez 'goto -h' pour afficher l'aide"
             else
                 new="$2:$3"
-                echo $new >> /home/thomas/.gotoFct
+                echo $new >> ~/.gotoFct
             fi
         else
             if [[ $1 == "-r" || $1 == "--remove" || $1 == "remove" ]]; then
@@ -22,7 +22,7 @@ function goto(){
                     echo "La commande est goto -r <alias>"
                     echo "Tapez 'goto -h' pour afficher l'aide"
                 else
-                    sed -i.bak "/$2*/d" /home/thomas/.gotoFct
+                    sed -i.bak "/$2*/d" ~/.gotoFct
                     echo "$2 supprimé !"
                 fi
             else
@@ -50,7 +50,7 @@ function goto(){
                     trouve=1
                     break;
                 fi
-            done < /home/thomas/.gotoFct
+            done < ~/.gotoFct
             if [[ $trouve == 0 ]]; then
                 while read line; do
                     alias=${line%:*}
@@ -60,7 +60,7 @@ function goto(){
                         trouve=1
                         break;
                     fi
-                done < /home/thomas/.gotoFct
+                done < ~/.gotoFct
 
                 if [[ $trouve == 0 ]]; then
                     echo "Alias non trouvé"
