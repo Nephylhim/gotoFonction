@@ -44,7 +44,7 @@ function goto(){
                 fi
             fi
         fi
-        if [[ $# == 1 ]]; then
+        if [[ $# == 1 && ${1:0:1} != "-" ]]; then
             trouve=0
             while read line; do
                 alias=${line%:*}
