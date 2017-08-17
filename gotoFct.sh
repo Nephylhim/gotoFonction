@@ -13,13 +13,20 @@ function goto(){
             done < ~/.gotoFct
             ;;
         "-a"|"--add"|"add")
-            if [[ $# != 3 ]]; then
-                echo "La commande est goto add <alias> <pwd>"
-                echo "Tapez 'goto -h' pour afficher l'aide"
-            else
-                new="$2:$3"
-                echo $new >> ~/.gotoFct
-            fi
+            case $# in
+                2)
+                    new="$2:$(pwd)"
+                    echo $new >> /home/$USER/.gotoFct
+                    ;;
+                3)
+                    new="$2:$3"
+                    echo $new >> ~/.gotoFct
+                    ;;
+                *)
+                    echo "La commande est goto add <alias> <pwd> (si pwd null, pwd prend le répertoire courant comme chemin)"
+                    echo "Tapez 'goto -h' pour afficher l'aide"
+                    ;;
+            esac
             ;;
         "-r"|"--remove"|"remove")
             if [[ $# != 2 ]]; then
