@@ -14,9 +14,13 @@ function goto(){
             ;;
         "-a"|"--add"|"add")
             case $# in
+                1)
+                    new="$(basename "$PWD"):$(pwd)"
+                    echo $new >> ~/.gotoFct
+                    ;;
                 2)
                     new="$2:$(pwd)"
-                    echo $new >> /home/$USER/.gotoFct
+                    echo $new >> ~/.gotoFct
                     ;;
                 3)
                     new="$2:$3"
