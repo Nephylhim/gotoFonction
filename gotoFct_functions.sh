@@ -2,27 +2,85 @@
 # ─── FUNCTIONS ──────────────────────────────────────────────────────────────────
 #
 
+function goto_alias_exists(){
+    local res=0
+    local al
+
+    if [[ $# != 1 ]]; then
+        echo "Missing parameter"
+    else
+        while read line; do
+            al=${line%:*}
+            if [[ "$al" == "$1" ]]; then
+                res=1
+            fi
+        done < ~/.gotoFct
+    fi
+
+    # return
+    # ────────────────────────────────────────────────────────────────────────────────
+    echo "$res"
+}
+
+function goto_path_exists(){
+    local res=0
+    local path
+
+    if [[ $# != 1 ]]; then
+        echo "Missing parameter"
+    else
+        while read line; do
+            path=${line#*:}
+            if [[ "$path" == "$1" ]]; then
+                res=1
+            fi
+        done < ~/.gotoFct
+    fi
+
+    # return
+    # ────────────────────────────────────────────────────────────────────────────────
+    echo "$res"
+}
+
 function goto_add(){
     local valid=1;
+    local al_exists;
+
     case $# in
         0)
+            al_exists=$(goto_alias_exists "$(basename $(pwd))")
+            path_exists=$(goto_path_exists "$(pwd)")
             new="$(basename "$PWD"):$(pwd)"
             ;;
         1)
+            al_exists=$(goto_alias_exists "$1")
+            path_exists=$(goto_path_exists "$(pwd)")
             new="$1:$(pwd)"
             ;;
         2)
+            al_exists=$(goto_alias_exists "$1")
+            path_exists=$(goto_path_exists "$2")
             new="$1:$2"
             ;;
         *)
             valid=0;
-            echo "command is goto add <alias> <path> (if path is null, it takes current directory as path)"
+            echo "Command is goto add <alias> <path> (if path is null, it takes current directory as path)"
             echo "Type 'goto -h' to show help"
             ;;
     esac
 
+    if [[ $al_exists == 1 ]]; then
+        valid=0
+        echo "An alias with this name already exist"
+    fi
+
+    if [[ $path_exists == 1 ]]; then
+        valid=0
+        echo "An alias with this path already exist"
+    fi
+
     if [[ $valid == 1 ]]; then
-        # if [[  ]]
+        echo "Adding $new"
         echo $new >> ~/.gotoFct
     fi
 }
@@ -53,8 +111,13 @@ function goto_remove(){
         echo "Command is goto -r <alias>"
         echo "Type 'goto -h' to show help"
     else
-        sed -i.bak "/$1:/d" ~/.gotoFct
-        echo "$1 deleted!"
+        al_exists=$(goto_alias_exists "$1")
+        if [[ $al_exists == 1 ]]; then
+            sed -i.bak "/$1:/d" ~/.gotoFct
+            echo "$1 deleted!"
+        else
+            echo "This alias doesn't exist"
+        fi
     fi
 }
 
