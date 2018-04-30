@@ -5,7 +5,7 @@
 function goto_completion(){
     gotoOptions=""
     gotoAliases=""
-    
+
     while read line; do
         al=${line%:*}
         gotoAliases+="$al "
@@ -22,15 +22,15 @@ function goto_completion(){
                     gotoOptions+="-l -a -r -h"
                     ;;
                 "-r")
-                    gotoOptions+=$gotoAliases
+                    gotoOptions+="$gotoAliases "
                     ;;
                 "-a")
-                    gotoOptions+=${PWD##*/}
+                    gotoOptions+="${PWD##*/} "
                     ;;
                 "-h");;
                 "-l");;
                 *)
-                    gotoOptions+=$gotoAliases
+                    gotoOptions+="$gotoAliases "
                     ;;
             esac
             ;;
@@ -40,13 +40,19 @@ function goto_completion(){
                     gotoOptions+="$(pwd) "
                     # gotoOptions+="$(dirname "$(pwd)") "
                     ;;
+                "-r")
+                    gotoOptions+="$gotoAliases "
+                    # gotoOptions+="$(dirname "$(pwd)") "
+                    ;;
                 *)
                     ;;
             esac
             ;;
     esac
 
-    COMPREPLY=($(compgen -W "$gotoOptions" "${COMP_WORDS[0]}"))
+    #COMPREPLY=($(compgen -W "$gotoOptions" "${COMP_WORDS[0]}"))
+    #COMPREPLY=($(compgen -W "$gotoOptions" "${COMP_WORDS[1]}"))
+    COMPREPLY=($(compgen -W "$gotoOptions"))
 }
 
 function goto_alias_exists(){
@@ -146,10 +152,10 @@ function goto_list(){
         else
             separator=" "
         fi
-        
+
         pwd=${line#*:}
-        
-        echo "$alias$separator-> $pwd"
+
+        echo -e "$alias$separator-> $pwd"
     done < ~/.gotoFct
 }
 
