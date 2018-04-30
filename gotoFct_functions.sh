@@ -2,6 +2,51 @@
 # ─── FUNCTIONS ──────────────────────────────────────────────────────────────────
 #
 
+function goto_completion(){
+    gotoOptions=""
+    gotoAliases=""
+    
+    while read line; do
+        al=${line%:*}
+        gotoAliases+="$al "
+    done < ~/.gotoFct
+
+    case ${#COMP_WORDS[@]} in
+        1)
+            gotoOptions+=$gotoAliases
+            gotoOptions+="-l -a -r -h"
+            ;;
+        2)
+            case ${COMP_WORDS[1]} in
+                "-")
+                    gotoOptions+="-l -a -r -h"
+                    ;;
+                "-r")
+                    gotoOptions+=$gotoAliases
+                    ;;
+                "-a")
+                    gotoOptions+=${PWD##*/}
+                    ;;
+                *)
+                    gotoOptions+=$gotoAliases
+                    ;;
+            esac
+            ;;
+        3)
+            case ${COMP_WORDS[1]} in
+                "-a")
+                    gotoOptions+="$(pwd) "
+                    # gotoOptions+="$(dirname "$(pwd)") "
+                    ;;
+                *)
+                    ;;
+            esac
+            ;;
+    esac
+
+    COMPREPLY=($(compgen -W "$gotoOptions" "${COMP_WORDS[0]}"))
+}
+
 function goto_alias_exists(){
     local res=0
     local al
@@ -136,28 +181,28 @@ function goto_help(){
 
 function goto_goto(){
     if [[ $# == 1 ]]; then
-        trouve=0
+        found=0
         while read line; do
             alias=${line%:*}
             pwd=${line#*:}
             if [[ $alias == $1 ]]; then
                 cd $pwd;
-                trouve=1
+                found=1
                 break;
             fi
         done < ~/.gotoFct
-        if [[ $trouve == 0 ]]; then
+        if [[ $found == 0 ]]; then
             while read line; do
                 alias=${line%:*}
                 pwd=${line#*:}
                 if [[ $alias == *$1* ]]; then
                     cd $pwd;
-                    trouve=1
+                    found=1
                     break;
                 fi
             done < ~/.gotoFct
 
-            if [[ $trouve == 0 ]]; then
+            if [[ $found == 0 ]]; then
                 echo "Alias not found"
                 echo "Type 'goto -h' to show help"
             fi
