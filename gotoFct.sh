@@ -7,6 +7,17 @@ my_dir="$(dirname "$0")"
 source $my_dir/gotoFct_functions.sh
 
 #
+# ─── INIT ───────────────────────────────────────────────────────────────────────
+#
+
+if [[ $SHELL == "/usr/bin/zsh" ]]; then
+    autoload -U +X compinit && compinit
+    autoload -U +X bashcompinit && bashcompinit
+fi
+
+complete -F goto_completion goto
+
+#
 # ─── MAIN ───────────────────────────────────────────────────────────────────────
 #
 
