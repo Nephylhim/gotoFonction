@@ -1,8 +1,8 @@
-used_shell=`ps -hp $$|awk '{print $5}'`
+used_shell=`ps -hp $$|awk 'END {print $NF;}'`
 
-if [[ $used_shell == "bash" ]]; then
+if [[ $used_shell == *"bash"* ]]; then
     my_dir="$(dirname "${BASH_SOURCE[0]}")"
-elif [[ $used_shell == "/usr/bin/zsh" ]]; then
+elif [[ $used_shell == *"zsh"* ]]; then
     my_dir="$(dirname "$0")"
 fi
 
@@ -16,7 +16,7 @@ source $my_dir/gotoFct_functions.sh
 # ─── INIT ───────────────────────────────────────────────────────────────────────
 #
 
-if [[ $used_shell == "/usr/bin/zsh" ]]; then
+if [[ $used_shell == *"zsh"* ]]; then
     autoload -U +X compinit && compinit
     autoload -U +X bashcompinit && bashcompinit
 fi
