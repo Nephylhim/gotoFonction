@@ -141,22 +141,8 @@ function goto_add(){
 function goto_list(){
     local separator
 
-    echo "Aliases:"; echo ""
-    while read line; do
-        alias=${line%:*}
-
-        if [ "${#alias}" -le 8 ]; then
-            separator="\t\t"
-        elif [ "${#alias}" -le 16 ]; then
-            separator="\t"
-        else
-            separator=" "
-        fi
-
-        pwd=${line#*:}
-
-        echo -e "$alias$separator-> $pwd"
-    done < ~/.gotoFct
+    echo -e "Aliases:\n";
+    column -s':' -t ~/.gotoFct
 }
 
 function goto_remove(){
